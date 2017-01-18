@@ -17,8 +17,26 @@
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $username = mysql_real_escape_string($_POST['username']);
     $password = mysql_real_escape_string($_POST['password']);
+    $bool = true;
     
-    echo "Username entered is: ". $username . "<br/>";
-    echo "Password entered is: ". $password;
+    mysql_connect("localhost", "root","") or die(mysql_error()); //Connect to server
+    mysql_select_db("first_db") or die("Cannot connect to database"); //Connect to database
+    $query = mysql_query("Select * from users"); //Query the users table
+    while($row = mysql_festch_array($query)) //Display all rows from query
+    {
+        $table_users = $row['username']; //The first username row is passed on to $table_users, and so on until the query is finished
+        {
+        $bool = false; //Setts bool to false
+        Print '<script>alert("Username has been taken!")</script>'; //Prompts the user
+        Print '<script>window.location.assign("register.php");</script>'; //Redirects to register.php
+    }
+}
+
+if($bool) //Checks if bool is true
+{
+    mysql_query("INSERT INTO users (username, password) VALUES ('$username','$password')"); //Inserts the value to table users
+    Print '<script>alert("Successfully Registered!");</script>'; //Prompts the user
+    Print '<script>window.location.assign("register,php");</script>'; //Redirects to register.php
+}
 }
 ?>
